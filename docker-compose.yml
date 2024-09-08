@@ -1,0 +1,64 @@
+services:
+  discovery:
+    build: ./Discovery-service
+    container_name: banque-discovery-service
+    ports:
+      - 8761:8761
+    expose:
+      - 8761
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://127.0.0.1:8761/actuator/health" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 60s  # Augmenter ce délai
+  config:
+    build: ./Config-service
+    container_name: banque-config-service
+    ports:
+      - 9999:9999
+    expose:
+      - 9999
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    depends_on:
+      discovery:
+        condition: service_healthy
+  account:
+    build: ./Account-service
+    container_name: banque-account-service
+    ports:
+      - 8082:8082
+    expose:
+      - 8082
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    #depends_on:
+      #discovery:
+        #condition: service_healthy
+  customer:
+    build: ./Customer-service
+    container_name: banque-customer-service
+    ports:
+      - 8081:8081
+    expose:
+      - 8081
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+        #depends_on:
+      #discovery:
+      #condition: service_healthy
+  gateway:
+    build: ./Gateway-service
+    container_name: banque-gateway-service
+    ports:
+      - 8888:8888
+    expose:
+      - 8888
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+        #depends_on:
+      #discovery:
+      #condition: service_healthy
+
+

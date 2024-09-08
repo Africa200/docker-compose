@@ -1,0 +1,7 @@
+{
+  "timestamp": "2024-09-04T11:41:21.737+00:00",
+  "path": "/CUSTOMER_SERVICE/actuator/refresh",
+  "status": 404,
+  "error": "Not Found",
+  "requestId": "388043f5-12"
+}
